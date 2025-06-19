@@ -49,7 +49,7 @@
         transition: all 0.3s ease;
       }
 
-      /* Contêiner dos botões de navegação */
+      /* Contêiner dos botões de navegação padrão (desktop) */
       .nav-buttons {
         display: flex;
         gap: 1rem;
@@ -77,10 +77,10 @@
         flex-shrink: 1; /* Permite que o botão individual encolha */
         min-width: 0; /* Permite que o botão encolha abaixo do seu tamanho de conteúdo */
 
-        /* NOVOS ESTILOS PARA CENTRALIZAR O TEXTO */
-        display: flex; /* Transforma o botão em um container flex */
-        justify-content: center; /* Centraliza o conteúdo horizontalmente */
-        align-items: center; /* Centraliza o conteúdo verticalmente */
+        /* Estilos para centralizar o texto */
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
       .nav-button:hover {
@@ -94,6 +94,72 @@
         background-color: rgba(166, 136, 77) !important;
       }
 
+      /* Ícone de Hambúrguer (para mobile) */
+      .hamburger-icon {
+        display: none; /* Escondido por padrão, visível apenas em mobile */
+        flex-direction: column;
+        justify-content: space-around;
+        width: 30px;
+        height: 25px;
+        cursor: pointer;
+        z-index: 101; /* Acima da navegação */
+      }
+
+      .hamburger-icon .bar {
+        width: 100%;
+        height: 3px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        transition: all 0.3s ease-in-out;
+      }
+
+      /* Menu Mobile (oculto por padrão) */
+      .mobile-menu {
+        display: none; /* Inicia oculto */
+        position: fixed;
+        top: 0;
+        right: -100%; /* Inicia fora da tela */
+        width: 70%; /* Largura do menu mobile */
+        height: 100%;
+        background-color: #0f0f0f;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 60px;
+        transition: right 0.3s ease-in-out;
+        z-index: 99;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .mobile-menu.open {
+        display: flex; /* Exibe quando aberto */
+        right: 0; /* Desliza para a tela */
+      }
+
+      .mobile-menu .nav-button {
+        width: 80%; /* Botões maiores no menu mobile */
+        margin-bottom: 1.5rem;
+        padding: 1.2rem 0;
+        font-size: 1.2rem;
+        border: 2px solid rgb(166, 136, 77);
+        color: rgb(166, 136, 77);
+        background-color: transparent;
+        text-align: center;
+        display: flex; /* Para centralizar o texto */
+        justify-content: center;
+        align-items: center;
+      }
+
+      .mobile-menu .nav-button:hover {
+        background-color: rgb(166, 136, 77);
+        color: #ffffff;
+        transform: none; /* Remove a translação no hover do mobile menu */
+      }
+      .mobile-menu .nav-button.active {
+        background-color: rgb(166, 136, 77) !important;
+        color: #ffffff !important;
+      }
+
+      /* Media queries para responsividade */
       /* Media query para telas médias (Desktop para Tablet) */
       @media (max-width: 1200px) {
         .nav-buttons {
@@ -107,39 +173,40 @@
 
       /* Media query para Tablets para Celulares */
       @media (max-width: 768px) {
+        .nav-buttons {
+          display: none; /* Esconde os botões da nav principal */
+        }
+        .hamburger-icon {
+          display: flex; /* Exibe o ícone de hambúrguer */
+        }
         nav {
           padding: 0 1rem;
-          flex-direction: column; /* Empilha o logo e os botões verticalmente */
-          height: auto; /* Altura automática */
-          min-height: 80px;
-          align-items: center; /* Centraliza os itens quando empilhados */
-          justify-content: center;
+          flex-direction: row; /* Volta a ser row para logo e hambúrguer */
+          justify-content: space-between;
+          height: 80px; /* Altura menor para a nav em mobile */
         }
 
-        .nav-logo {
-          height: auto; /* Permite que a altura do logo se ajuste */
-          padding-top: 0.5rem;
-          padding-bottom: 0.5rem;
-        }
         .nav-logo img {
-          height: 70px; /* Logo menor quando empilhada */
-          max-width: 180px; /* Ajusta a largura máxima para o logo empilhado */
+          height: 60px; /* Logo menor em mobile */
+          max-width: 150px;
         }
 
-        .nav-buttons {
-          gap: 0.5rem;
-          padding: 0.5rem 0;
-          width: 100%; /* Ocupa a largura total quando empilhado */
-          justify-content: center; /* Centraliza os botões */
-          flex-wrap: wrap; /* Permite que os botões quebrem para a próxima linha */
-          flex-grow: 0; /* Redefine o crescimento quando há quebra de linha */
-          flex-shrink: 0; /* Redefine o encolhimento quando há quebra de linha */
+        /* HOME SECTION - Ajustes para Mobile */
+        #home {
+          min-height: 70vh; /* Altura mínima menor para mobile */
+          /* padding já é geral, o padding específico do conteúdo está abaixo */
         }
 
-        .nav-button {
-          padding: 0.6rem 1rem;
-          font-size: 0.85rem; /* Fonte menor para telas menores */
-          flex-basis: auto; /* Permite que cada botão determine seu próprio tamanho naturalmente */
+        #home .content {
+          width: 90%;
+          height: auto; /* Garante que a altura se ajuste ao conteúdo */
+          min-height: 250px; /* Reduzindo min-height */
+          padding: 70px 12px; /* Alterado padding conforme solicitado */
+        }
+
+        #home .content p {
+          font-size: 1.35rem; /* Alterado font-size conforme solicitado */
+          font-family: Arial, sans-serif; /* Alterado font-family conforme solicitado */
         }
       }
 
@@ -147,14 +214,28 @@
       @media (max-width: 480px) {
         .nav-logo img {
           height: 50px;
-          max-width: 150px;
-        }
-        .nav-buttons {
-          gap: 0.3rem; /* Espaçamento ainda menor */
+          max-width: 120px;
         }
         .nav-button {
-          padding: 0.5rem 0.8rem; /* Padding ainda menor */
-          font-size: 0.75rem; /* Fonte ainda menor */
+          /* Ajuste geral de fonte e padding para botões do menu mobile */
+          font-size: 1.1rem;
+          padding: 1rem 0;
+        }
+
+        /* HOME SECTION - Ajustes para Mobile muito pequenos */
+        #home {
+          min-height: 60vh; /* Altura mínima ainda menor */
+          padding: 2rem 0.8rem; /* Mais redução de padding */
+        }
+
+        #home .content {
+          min-height: 200px; /* Ajuste para telas muito pequenas */
+          padding: 50px 10px; /* Ajustado padding para telas menores */
+        }
+
+        #home .content p {
+          font-size: 1.15rem; /* Ajustado font-size para telas menores */
+          font-family: Arial, sans-serif; /* Mantém font-family */
         }
       }
 
@@ -173,7 +254,7 @@
             rgba(15, 15, 15, 0.7),
             rgba(15, 15, 15, 0.7)
           ),
-          url(https://placehold.co/1920x1080/0f0f0f/e0e0e0?text=Background+Home); /* Placeholder image */
+          url(Imagens/Home.png); /* Caminho original restaurado */
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -226,33 +307,6 @@
         font-style: italic;
         margin-bottom: 0;
         text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-      }
-
-      @media (max-width: 768px) {
-        #home .content {
-          width: 90%;
-          height: auto;
-          min-height: 300px;
-          padding: 2rem;
-        }
-
-        .home-logo {
-          height: 120px;
-        }
-
-        #home .content p {
-          font-size: 1.15rem; /* Ajuste da fonte */
-        }
-      }
-
-      @media (max-width: 480px) {
-        .home-logo {
-          height: 100px;
-        }
-
-        #home .content p {
-          font-size: 1.05rem; /* Ajuste da fonte */
-        }
       }
 
       /* Seção Sobre Nós */
@@ -1152,17 +1206,64 @@
         }
       }
 
+      /* Ajustes específicos para mobile na seção Contato */
       @media (max-width: 768px) {
+        #contato {
+          padding: 4rem 1.5rem; /* Reduzindo padding horizontal para evitar overflow */
+        }
         .contato-info {
-          grid-template-columns: 1fr;
+          grid-template-columns: 1fr; /* Já era 1fr */
+          gap: 1.5rem; /* Reduzindo o gap entre os cards */
         }
-
         .contato-logo img {
-          height: 120px;
+          height: 100px; /* Reduzindo um pouco mais a logo para telas menores */
         }
-
         .info-item {
-          padding: 1.2rem;
+          padding: 1rem; /* Reduzindo o padding interno dos cards */
+          gap: 1rem; /* Reduzindo o gap entre ícone e texto dentro do card */
+          flex-direction: row; /* Mantém ícone e texto lado a lado se houver espaço */
+          justify-content: flex-start;
+          text-align: left;
+        }
+        .info-item .icon,
+        .contact-icon {
+          min-width: 40px; /* Reduzindo tamanho mínimo do ícone */
+          width: 40px;
+          height: 40px;
+        }
+        .info-item-content h3 {
+          font-size: 1.3rem; /* Ajuste de fonte */
+        }
+        .contato-link {
+          font-size: 1.05rem; /* Ajuste de fonte */
+        }
+      }
+
+      @media (max-width: 480px) {
+        #contato {
+          padding: 3rem 1rem; /* Ainda mais redução de padding em telas muito pequenas */
+        }
+        .contato-info {
+          gap: 1rem; /* Mais um pouco de redução no gap */
+        }
+        .info-item {
+          padding: 0.8rem; /* Redução máxima de padding para os cards */
+          flex-direction: column; /* Força o ícone e o texto a empilharem */
+          align-items: center; /* Centraliza verticalmente quando empilhado */
+          text-align: center;
+          gap: 0.5rem; /* Espaçamento menor quando empilhado */
+        }
+        .info-item .icon,
+        .contact-icon {
+          min-width: 35px; /* Ícones ainda menores */
+          width: 35px;
+          height: 35px;
+        }
+        .info-item-content h3 {
+          font-size: 1.2rem;
+        }
+        .contato-link {
+          font-size: 0.95rem;
         }
       }
 
@@ -1248,12 +1349,8 @@
   <body>
     <nav>
       <div class="nav-logo">
-        <!-- Imagem do logo: Usando um placeholder, já que a imagem original 'Imagens/Logo.png' não está disponível diretamente no ambiente. -->
-        <img
-          src="https://placehold.co/200x80/0f0f0f/e0e0e0?text=Logo"
-          class="nav-icon"
-          alt="Site logo"
-        />
+        <!-- Imagem do logo: Caminho original restaurado -->
+        <img src="Imagens/Logo.png" class="nav-icon" alt="Site logo" />
       </div>
       <div class="nav-buttons">
         <button class="nav-button" onclick="scrollToSection('home')">
@@ -1281,16 +1378,41 @@
           Contato
         </button>
       </div>
+      <!-- Ícone de Hambúrguer para Mobile -->
+      <div class="hamburger-icon" id="hamburgerIcon">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
     </nav>
+
+    <!-- Menu Mobile (oculto por padrão) -->
+    <div class="mobile-menu" id="mobileMenu">
+      <button class="nav-button" onclick="scrollToSection('home')">Home</button>
+      <button class="nav-button" onclick="scrollToSection('sobre-nós')">
+        Sobre Nós
+      </button>
+      <button class="nav-button" onclick="scrollToSection('servicos')">
+        Serviços
+      </button>
+      <button class="nav-button" onclick="scrollToSection('portfolio-eventos')">
+        Portfólio de Eventos
+      </button>
+      <button class="nav-button" onclick="scrollToSection('feedback')">
+        Feedback
+      </button>
+      <button class="nav-button" onclick="scrollToSection('duvidas')">
+        Dúvidas
+      </button>
+      <button class="nav-button" onclick="scrollToSection('contato')">
+        Contato
+      </button>
+    </div>
 
     <section id="home">
       <div class="content">
-        <!-- Imagem do logo na home: Usando um placeholder. -->
-        <img
-          src="https://placehold.co/220x220/0f0f0f/e0e0e0?text=N+Eventos"
-          class="home-logo"
-          alt="N Eventos"
-        />
+        <!-- Imagem do logo na home: Caminho original restaurado -->
+        <img src="Imagens/Logo.png" class="home-logo" alt="N Eventos" />
         <p>
           N Eventos, onde seu sonho ganha forma, com carinho, profissionalismo e
           aquele toque que só quem ama o que faz pode oferecer.<br />
@@ -1303,11 +1425,8 @@
     <section id="sobre-nós">
       <div class="conteudo-sobre-nós">
         <div class="imagem-sobre-nós">
-          <!-- Imagem da trabalhadora: Usando um placeholder. -->
-          <img
-            src="https://placehold.co/500x350/0f0f0f/e0e0e0?text=Mulher+Trabalhadora"
-            alt="mulher trabalhadora"
-          />
+          <!-- Imagem da trabalhadora: Caminho original restaurado -->
+          <img src="Imagens/Trabalhadora.jpg" alt="mulher trabalhadora" />
         </div>
         <div class="texto-sobre-nós">
           <p>
@@ -1364,22 +1483,15 @@
 
             <div class="servicos-imagens">
               <div class="servico-imagem">
-                <!-- Imagens de serviço: Usando placeholders. -->
-                <img
-                  src="https://placehold.co/400x300/0f0f0f/e0e0e0?text=Serviço+1"
-                  alt="Serviço 1"
-                />
+                <!-- Imagens de serviço: Caminho original restaurado -->
+                <img src="Imagens/Servico2.png" alt="Serviço 1" />
               </div>
 
               <div class="servico-imagem">
-                <img
-                  src="https://placehold.co/400x200/0f0f0f/e0e0e0?text=Serviço+2"
-                  alt="Serviço 2"
-                />
-                <img
-                  src="https://placehold.co/400x200/0f0f0f/e0e0e0?text=Serviço+3"
-                  alt="Serviço 3"
-                />
+                <img src="Imagens/Servico1.png" alt="Serviço 2" />
+                <!-- Caminho original restaurado -->
+                <img src="Imagens/Servico3.png" alt="Serviço 3" />
+                <!-- Caminho original restaurado -->
               </div>
             </div>
           </div>
@@ -1544,11 +1656,8 @@
     <section id="contato">
       <div class="contato-container">
         <div class="contato-logo">
-          <!-- Imagem do logo de contato: Usando um placeholder. -->
-          <img
-            src="https://placehold.co/300x300/0f0f0f/e0e0e0?text=Logo+Contato"
-            alt="Logo N Eventos"
-          />
+          <!-- Imagem do logo de contato: Caminho original restaurado -->
+          <img src="Imagens/Logo.png" alt="Logo N Eventos" />
         </div>
 
         <div class="contato-content">
@@ -1629,14 +1738,24 @@
       function scrollToSection(sectionId) {
         const section = document.getElementById(sectionId);
         section.scrollIntoView({ behavior: "smooth" });
+        // Adicionado para fechar o menu mobile após clicar em um item
+        const mobileMenu = document.getElementById("mobileMenu");
+        if (mobileMenu.classList.contains("open")) {
+          mobileMenu.classList.remove("open");
+          document.body.style.overflow = "auto"; // Restaura o scroll do body
+        }
       }
 
       document.addEventListener("DOMContentLoaded", () => {
-        // Botões da barra de navegação
+        // Botões da barra de navegação (desktop)
         const navButtons = document.querySelectorAll(".nav-button");
         navButtons.forEach((button) => {
           button.addEventListener("click", function () {
-            navButtons.forEach((btn) => btn.classList.remove("active"));
+            // Remover 'active' de todos os botões de navegação
+            document
+              .querySelectorAll(".nav-button")
+              .forEach((btn) => btn.classList.remove("active"));
+            // Adicionar 'active' apenas ao botão clicado
             this.classList.add("active");
           });
         });
@@ -1644,8 +1763,7 @@
         // Ativa o botão da navegação ao rolar para a seção correspondente
         window.addEventListener("scroll", () => {
           const sections = document.querySelectorAll("section");
-          // Recarrega os botões da navegação para garantir que a NodeList esteja atualizada
-          const currentNavButtons = document.querySelectorAll(".nav-button");
+          const currentNavButtons = document.querySelectorAll(".nav-button"); // Garante NodeList atualizada
 
           sections.forEach((section, index) => {
             const rect = section.getBoundingClientRect();
@@ -1654,7 +1772,6 @@
               currentNavButtons.forEach((btn) =>
                 btn.classList.remove("active")
               );
-              // Verifica se o botão existe antes de adicionar a classe 'active'
               if (currentNavButtons[index]) {
                 currentNavButtons[index].classList.add("active");
               }
@@ -1711,32 +1828,28 @@
         );
         const galeriaDiversos = document.getElementById("galeria-diversos");
 
-        // Função para gerar itens do portfólio com placeholders agrupados
+        // Função para gerar itens do portfólio com caminhos originais
         const generatePortfolioItems = (galleryElement, categoryName) => {
-          const categoryTypes = {
-            casamento: ["Tradicional", "Junino", "Praia", "Campo"],
-            aniversario: ["Infantil", "Adulto", "Temático", "Debutante"],
-            corporativo: ["Conferência", "Lançamento", "Gala", "Feira"],
-            diversos: ["Formatura", "Chá de Bebê", "Desfile", "Exposição"],
+          const categoryImagePrefix = {
+            casamento: "Casamento",
+            aniversario: "Aniversario",
+            corporativo: "Corporativo",
+            diversos: "Diversos",
           };
+          const imagePrefix = categoryImagePrefix[categoryName];
 
-          const types = categoryTypes[categoryName] || ["Geral"];
-
-          for (let typeIndex = 0; typeIndex < types.length; typeIndex++) {
-            const type = types[typeIndex];
-            for (let i = 1; i <= 5; i++) {
-              // Gerar 5 fotos por tipo
-              const itemHTML = `
-                            <div class="item-portfolio">
-                                <img src="https://placehold.co/400x300/1a1a1a/e0e0e0?text=${categoryName}+${type}+${i}" alt="${categoryName} ${type} ${i}">
-                                <div class="overlay">
-                                    <h3>${type} ${i}</h3>
-                                    <p>Detalhes do evento de ${type}.</p>
-                                </div>
+          // Gerar 20 fotos para cada categoria, usando os caminhos originais
+          for (let i = 1; i <= 20; i++) {
+            const itemHTML = `
+                        <div class="item-portfolio">
+                            <img src="ImagensPortfolio/${imagePrefix}${i}.jpg" alt="${categoryName} ${i}">
+                            <div class="overlay">
+                                <h3>${categoryName} ${i}</h3>
+                                <p>Detalhes do evento de ${categoryName}.</p>
                             </div>
-                        `;
-              galleryElement.innerHTML += itemHTML;
-            }
+                        </div>
+                    `;
+            galleryElement.innerHTML += itemHTML;
           }
         };
 
@@ -1755,11 +1868,17 @@
         const modalImage = document.getElementById("modalImage");
         const closeModal = document.querySelector(".close-modal");
 
-        document.querySelectorAll(".item-portfolio img").forEach((img) => {
-          img.addEventListener("click", function () {
-            imageModal.style.display = "flex"; // Exibir modal
-            modalImage.src = this.src; // Definir a imagem clicada como fonte do modal
-            modalImage.alt = this.alt;
+        // Usar um evento delegado para cliques em imagens dentro da galeria
+        document.querySelectorAll(".galeria-portfolio").forEach((galeria) => {
+          galeria.addEventListener("click", function (event) {
+            if (
+              event.target.tagName === "IMG" &&
+              event.target.closest(".item-portfolio")
+            ) {
+              imageModal.style.display = "flex"; // Exibir modal
+              modalImage.src = event.target.src; // Definir a imagem clicada como fonte do modal
+              modalImage.alt = event.target.alt;
+            }
           });
         });
 
@@ -1848,6 +1967,30 @@
 
         // Chamar a função para gerar nomes quando a página carregar
         generateRandomNames();
+
+        // Lógica do Menu Hamburger
+        const hamburgerIcon = document.getElementById("hamburgerIcon");
+        const mobileMenu = document.getElementById("mobileMenu");
+
+        hamburgerIcon.addEventListener("click", () => {
+          mobileMenu.classList.toggle("open");
+          // Previne o scroll do body quando o menu mobile está aberto
+          document.body.style.overflow = mobileMenu.classList.contains("open")
+            ? "hidden"
+            : "auto";
+        });
+
+        // Fecha o menu mobile se clicar fora dele ou em um item do menu
+        mobileMenu.addEventListener("click", (e) => {
+          if (e.target.classList.contains("nav-button")) {
+            // Clicou em um item do menu
+            // A função scrollToSection já cuida de fechar o menu
+          } else if (e.target === mobileMenu) {
+            // Clicou na área do overlay fora dos botões
+            mobileMenu.classList.remove("open");
+            document.body.style.overflow = "auto";
+          }
+        });
       });
     </script>
   </body>
