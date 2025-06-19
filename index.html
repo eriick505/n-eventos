@@ -4,13 +4,1256 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Site de Eventos</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="wa-button.css" />
+    <style>
+      /* Estilos CSS Base */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        background-color: white;
+        font-size: 1.05rem; /* Aumento da fonte base para todo o site */
+      }
+
+      /* Navegação */
+      nav {
+        background-color: #0f0f0f;
+        padding: 0 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 90px; /* Aumentado de 80px para alargar a tarja */
+        width: 100%;
+        box-sizing: border-box; /* Garante que o padding seja incluído na largura total */
+      }
+
+      .nav-logo {
+        height: 90px; /* Ajustado para corresponder à altura da nav */
+        display: flex;
+        align-items: center;
+      }
+
+      .nav-logo img {
+        height: 85px; /* Aumentado um pouco para visibilidade dentro da nova altura da nav */
+        width: auto;
+        max-width: 250px; /* Aumentado para visibilidade */
+        object-fit: contain;
+        transition: all 0.3s ease;
+      }
+
+      /* Contêiner dos botões de navegação */
+      .nav-buttons {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: nowrap; /* Impede que os botões quebrem para a próxima linha em telas maiores */
+        flex-shrink: 1; /* Permite que os botões diminuam se o espaço for limitado */
+        flex-grow: 1; /* Permite que os botões cresçam para preencher o espaço disponível */
+        justify-content: flex-end; /* Alinha os botões à direita */
+        min-width: 0; /* Essencial para permitir que o contêiner encolha */
+      }
+
+      .nav-button {
+        background: transparent;
+        color: #ffffff;
+        padding: 0.8rem 1.8rem;
+        border: 2px solid transparent;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        position: relative;
+        overflow: hidden;
+        white-space: nowrap; /* Mantém o texto do botão em uma única linha */
+        flex-shrink: 1; /* Permite que o botão individual encolha */
+        min-width: 0; /* Permite que o botão encolha abaixo do seu tamanho de conteúdo */
+
+        /* NOVOS ESTILOS PARA CENTRALIZAR O TEXTO */
+        display: flex; /* Transforma o botão em um container flex */
+        justify-content: center; /* Centraliza o conteúdo horizontalmente */
+        align-items: center; /* Centraliza o conteúdo verticalmente */
+      }
+
+      .nav-button:hover {
+        color: rgb(166, 136, 77);
+        border-color: rgb(166, 136, 77);
+        transform: translateY(-3px);
+      }
+
+      .nav-button.active {
+        color: #ffffff !important;
+        background-color: rgba(166, 136, 77) !important;
+      }
+
+      /* Media query para telas médias (Desktop para Tablet) */
+      @media (max-width: 1200px) {
+        .nav-buttons {
+          gap: 0.8rem; /* Reduz o espaçamento entre os botões */
+        }
+        .nav-button {
+          padding: 0.7rem 1.5rem; /* Reduz o padding dos botões */
+          font-size: 0.95rem; /* Diminui um pouco a fonte dos botões */
+        }
+      }
+
+      /* Media query para Tablets para Celulares */
+      @media (max-width: 768px) {
+        nav {
+          padding: 0 1rem;
+          flex-direction: column; /* Empilha o logo e os botões verticalmente */
+          height: auto; /* Altura automática */
+          min-height: 80px;
+          align-items: center; /* Centraliza os itens quando empilhados */
+          justify-content: center;
+        }
+
+        .nav-logo {
+          height: auto; /* Permite que a altura do logo se ajuste */
+          padding-top: 0.5rem;
+          padding-bottom: 0.5rem;
+        }
+        .nav-logo img {
+          height: 70px; /* Logo menor quando empilhada */
+          max-width: 180px; /* Ajusta a largura máxima para o logo empilhado */
+        }
+
+        .nav-buttons {
+          gap: 0.5rem;
+          padding: 0.5rem 0;
+          width: 100%; /* Ocupa a largura total quando empilhado */
+          justify-content: center; /* Centraliza os botões */
+          flex-wrap: wrap; /* Permite que os botões quebrem para a próxima linha */
+          flex-grow: 0; /* Redefine o crescimento quando há quebra de linha */
+          flex-shrink: 0; /* Redefine o encolhimento quando há quebra de linha */
+        }
+
+        .nav-button {
+          padding: 0.6rem 1rem;
+          font-size: 0.85rem; /* Fonte menor para telas menores */
+          flex-basis: auto; /* Permite que cada botão determine seu próprio tamanho naturalmente */
+        }
+      }
+
+      /* Media query para telas de Celular ainda menores */
+      @media (max-width: 480px) {
+        .nav-logo img {
+          height: 50px;
+          max-width: 150px;
+        }
+        .nav-buttons {
+          gap: 0.3rem; /* Espaçamento ainda menor */
+        }
+        .nav-button {
+          padding: 0.5rem 0.8rem; /* Padding ainda menor */
+          font-size: 0.75rem; /* Fonte ainda menor */
+        }
+      }
+
+      section {
+        padding: 4rem 2rem;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Seção Home */
+      #home {
+        background: linear-gradient(
+            rgba(15, 15, 15, 0.7),
+            rgba(15, 15, 15, 0.7)
+          ),
+          url(https://placehold.co/1920x1080/0f0f0f/e0e0e0?text=Background+Home); /* Placeholder image */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        color: white;
+        text-align: center;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #home .content {
+        background-color: rgba(15, 15, 15, 0.6);
+        padding: 3rem;
+        border-radius: 15px;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(218, 165, 32, 0.3);
+        width: 90%; /* Alterado para porcentagem */
+        max-width: 800px; /* Mantém largura máxima para telas grandes */
+        height: auto; /* Alterado para auto para remover barra de rolagem */
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden; /* Alterado para hidden para remover barra de rolagem */
+      }
+
+      .home-logo {
+        height: 220px; /* Aumentado de 180px */
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 0 15px rgba(218, 150, 32, 0.5));
+        margin-bottom: 2rem;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+
+      .home-logo:hover {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 20px rgba(218, 153, 32, 0.7));
+      }
+
+      #home .content p {
+        color: #e0e0e0;
+        font-size: 1.25rem; /* Ajuste da fonte */
+        line-height: 1.8;
+        font-family: "Brush Script MT", "Brush Script Std", cursive;
+        font-style: italic;
+        margin-bottom: 0;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+      }
+
+      @media (max-width: 768px) {
+        #home .content {
+          width: 90%;
+          height: auto;
+          min-height: 300px;
+          padding: 2rem;
+        }
+
+        .home-logo {
+          height: 120px;
+        }
+
+        #home .content p {
+          font-size: 1.15rem; /* Ajuste da fonte */
+        }
+      }
+
+      @media (max-width: 480px) {
+        .home-logo {
+          height: 100px;
+        }
+
+        #home .content p {
+          font-size: 1.05rem; /* Ajuste da fonte */
+        }
+      }
+
+      /* Seção Sobre Nós */
+      #sobre-nós {
+        background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+        position: relative;
+        overflow: hidden;
+        min-height: auto; /* Remover min-height: 100vh para permitir ajuste de altura */
+        padding-top: 6rem;
+        padding-bottom: 6rem;
+      }
+
+      .conteudo-sobre-nós {
+        display: flex;
+        align-items: center;
+        gap: 4rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem; /* Reduzir padding para melhor ajuste */
+        position: relative;
+        z-index: 1;
+        flex-wrap: wrap; /* Adicionado para responsividade */
+        justify-content: center; /* Centralizar itens em telas menores */
+      }
+
+      .imagem-sobre-nós {
+        flex: 1;
+        position: relative;
+        min-width: 300px;
+        max-width: 450px; /* Ajuste para controlar o tamanho */
+      }
+
+      .imagem-sobre-nós img {
+        width: 100%;
+        height: auto; /* Garantir que a altura se ajuste */
+        border-radius: 12px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        border: 2px solid rgba(218, 165, 32, 0.3);
+        transition: transform 0.5s ease, box-shadow 0.5s ease;
+      }
+
+      .imagem-sobre-nós::after {
+        content: "";
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        right: -20px;
+        bottom: -20px;
+        border: 2px solid rgb(166, 136, 77);
+        border-radius: 12px;
+        z-index: -1;
+        opacity: 0.5;
+        transition: all 0.5s ease;
+      }
+
+      .imagem-sobre-nós:hover img {
+        transform: scale(1.03);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+      }
+
+      .imagem-sobre-nós:hover::after {
+        top: 15px;
+        left: 15px;
+        right: -15px;
+        bottom: -15px;
+      }
+
+      .texto-sobre-nós {
+        flex: 1;
+        padding: 2rem;
+        background-color: rgba(15, 15, 15, 0.7);
+        border-radius: 12px;
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(218, 165, 32, 0.2);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        min-width: 300px;
+      }
+
+      .texto-sobre-nós h1 {
+        color: rgb(166, 136, 77);
+        font-size: 2.8rem;
+        margin-bottom: 2rem;
+        position: relative;
+        display: inline-block;
+      }
+
+      .texto-sobre-nós h1::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 80px;
+        height: 3px;
+        background: rgb(166, 136, 77);
+      }
+
+      .texto-sobre-nós p {
+        color: #e0e0e0;
+        font-size: 1.15rem; /* Ajuste da fonte */
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+      }
+
+      @media (max-width: 992px) {
+        .conteudo-sobre-nós {
+          flex-direction: column;
+          gap: 3rem;
+        }
+
+        .imagem-sobre-nós {
+          max-width: 80%;
+        }
+
+        .texto-sobre-nós {
+          max-width: 100%;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .imagem-sobre-nós {
+          max-width: 100%;
+        }
+
+        .texto-sobre-nós h1 {
+          font-size: 2.2rem;
+        }
+      }
+
+      /* Seção Serviços */
+      #servicos {
+        background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+        padding: 6rem 2rem;
+        position: relative;
+        color: #ffffff;
+        min-height: auto; /* Remover min-height: 100vh para permitir ajuste de altura */
+      }
+
+      .servicos-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .servicos-content h1 {
+        text-align: center;
+        margin-bottom: 4rem;
+        position: relative;
+        font-size: 3.5rem;
+        color: rgb(166, 136, 77);
+      }
+
+      .servicos-content h1::after {
+        content: "";
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 3px;
+        background: rgb(166, 136, 77);
+      }
+
+      .servicos-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 3rem;
+        align-items: start;
+        align-items: center; /* Centralizar verticalmente os itens do grid */
+      }
+
+      .servicos-texto {
+        padding: 2rem;
+      }
+
+      .servicos-texto p {
+        color: #e0e0e0;
+        font-size: 1.15rem; /* Ajuste da fonte */
+        line-height: 1.8;
+        margin-bottom: 2rem;
+      }
+
+      .servicos-texto h3 {
+        color: rgb(166, 136, 77);
+        font-size: 1.6rem; /* Ajuste da fonte */
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+      }
+
+      .servicos-lista {
+        list-style-type: none;
+        margin-left: 1rem;
+      }
+
+      .servicos-lista li {
+        position: relative;
+        padding-left: 2rem;
+        margin-bottom: 1rem;
+        color: #e0e0e0;
+        font-size: 1.15rem; /* Ajuste da fonte */
+        line-height: 1.6;
+      }
+
+      .servicos-lista li::before {
+        content: "•";
+        color: rgb(166, 136, 77);
+        font-size: 1.5rem;
+        position: absolute;
+        left: 0;
+        top: -3px;
+      }
+
+      .servicos-imagens {
+        display: flex;
+        width: 100%;
+        height: auto; /* Alterado de 500px para auto */
+        gap: 1.5rem;
+        position: relative;
+        flex-wrap: wrap; /* Adicionado para responsividade */
+        justify-content: center; /* Centralizar imagens em telas menores */
+      }
+
+      .servico-imagem {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        flex: 1 1 auto; /* Permitir que as imagens se ajustem */
+        min-width: 250px; /* Tamanho mínimo para as imagens */
+      }
+
+      .servico-imagem:nth-child(1) {
+        width: 50%;
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        min-width: 300px;
+      }
+
+      .servico-imagem:nth-child(1) img {
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 400px; /* Limite de altura para a imagem principal */
+        object-fit: contain;
+        object-position: center;
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        background-color: rgba(15, 15, 15, 0.7);
+      }
+
+      .servico-imagem:nth-child(2) {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 0;
+        min-width: 250px;
+      }
+
+      .servico-imagem:nth-child(2) img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        background-color: rgba(15, 15, 15, 0.7);
+      }
+
+      .servico-imagem:hover {
+        transform: translateY(-5px);
+      }
+
+      .servico-imagem:hover img {
+        transform: scale(1.03);
+      }
+
+      @media (max-width: 1200px) {
+        .servicos-imagens {
+          height: auto;
+        }
+      }
+
+      @media (max-width: 992px) {
+        .servicos-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .servicos-imagens {
+          height: auto;
+          margin-top: 2rem;
+        }
+
+        .servico-imagem:nth-child(1),
+        .servico-imagem:nth-child(2) {
+          width: 100%;
+          height: auto;
+        }
+        .servico-imagem:nth-child(1) img {
+          max-height: 350px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .servicos-content h1 {
+          font-size: 2.5rem;
+          margin-bottom: 3rem;
+        }
+
+        .servicos-texto {
+          padding: 1rem;
+        }
+
+        .servicos-imagens {
+          flex-direction: column;
+        }
+
+        .servico-imagem:nth-child(1),
+        .servico-imagem:nth-child(2) {
+          height: auto;
+        }
+
+        .servico-imagem:nth-child(1) img {
+          max-height: 280px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        #servicos {
+          padding: 4rem 1rem;
+        }
+
+        .servicos-content h1 {
+          font-size: 2rem;
+        }
+
+        .servicos-lista li {
+          font-size: 1.05rem; /* Ajuste da fonte */
+        }
+
+        .servico-imagem:nth-child(1),
+        .servico-imagem:nth-child(2) {
+          height: auto;
+        }
+
+        .servico-imagem:nth-child(1) img {
+          max-height: 230px;
+        }
+      }
+
+      /* Seção Portfólio de Eventos */
+      #portfolio-eventos {
+        background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+        padding: 6rem 2rem;
+        min-height: 100vh;
+      }
+
+      .portfolio-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .categorias {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-bottom: 4rem;
+        flex-wrap: wrap;
+      }
+
+      .categoria-btn {
+        padding: 1rem 2.5rem;
+        background-color: #0f0f0f;
+        border: 2px solid rgb(166, 136, 77);
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        color: white;
+        margin: 0.5rem;
+      }
+
+      .categoria-btn:hover {
+        background-color: rgb(166, 136, 77);
+        transform: translateY(-3px);
+      }
+
+      .categoria-btn.active {
+        background-color: rgb(166, 136, 77);
+        border-color: rgb(166, 136, 77);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(166, 136, 77, 0.4);
+      }
+
+      .galeria-portfolio {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2.5rem;
+        padding: 1rem;
+      }
+
+      .item-portfolio {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        aspect-ratio: 4/3;
+        transition: all 0.3s ease;
+        cursor: pointer; /* Adicionado para indicar clicável */
+      }
+
+      .item-portfolio:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 15px 35px rgba(166, 136, 77, 0.2);
+      }
+
+      .item-portfolio img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Manter cover para preencher o espaço da miniatura */
+        display: block;
+      }
+
+      .overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(
+          to top,
+          rgba(15, 15, 15, 0.95),
+          transparent
+        );
+        color: white;
+        padding: 2.5rem 1.5rem 1.5rem;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+      }
+
+      .item-portfolio:hover .overlay {
+        transform: translateY(0);
+      }
+
+      .overlay h3 {
+        color: rgb(166, 136, 77);
+        margin-bottom: 0.8rem;
+        font-size: 1.4rem;
+      }
+
+      .overlay p {
+        color: #e0e0e0;
+        font-size: 1rem;
+        margin-bottom: 0;
+      }
+
+      @media (max-width: 1200px) {
+        .galeria-portfolio {
+          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        }
+      }
+
+      @media (max-width: 768px) {
+        .categorias {
+          gap: 1rem;
+        }
+
+        .categoria-btn {
+          padding: 0.8rem 1.8rem;
+          font-size: 1rem;
+        }
+
+        .galeria-portfolio {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+
+        .item-portfolio {
+          max-width: 500px;
+          margin: 0 auto;
+        }
+      }
+
+      /* Modal de Imagem */
+      .image-modal {
+        display: none; /* Escondido por padrão */
+        position: fixed;
+        z-index: 200; /* Acima de tudo */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.9); /* Fundo escuro transparente */
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .image-modal-content {
+        margin: auto;
+        display: block;
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(218, 165, 32, 0.5);
+        animation-name: zoom;
+        animation-duration: 0.6s;
+        object-fit: contain; /* Para garantir que a imagem inteira seja vista */
+      }
+
+      @keyframes zoom {
+        from {
+          transform: scale(0.1);
+        }
+        to {
+          transform: scale(1);
+        }
+      }
+
+      .close-modal {
+        position: absolute;
+        top: 20px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+        cursor: pointer;
+      }
+
+      .close-modal:hover,
+      .close-modal:focus {
+        color: rgb(166, 136, 77);
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      /* Seção Feedback */
+      #feedback {
+        background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+        padding: 6rem 2rem;
+        color: #ffffff;
+      }
+
+      #feedback h1 {
+        text-align: center;
+        margin-bottom: 4rem;
+        position: relative;
+      }
+
+      #feedback h1::after {
+        content: "";
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 3px;
+        background: rgb(166, 136, 77);
+      }
+
+      .comentarios {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .comentario {
+        background-color: rgba(15, 15, 15, 0.7);
+        border-radius: 12px;
+        padding: 2.5rem;
+        flex: 1 1 300px;
+        max-width: 380px;
+        border: 1px solid rgba(166, 136, 77, 0.3);
+        backdrop-filter: blur(5px);
+        transition: all 0.4s ease;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .comentario:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(166, 136, 77, 0.1);
+        border-color: rgba(166, 136, 77, 0.5);
+      }
+
+      .comentario p {
+        color: #e0e0e0;
+        font-size: 1.05rem; /* Ajuste da fonte */
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+        font-style: italic;
+        position: relative;
+      }
+
+      .comentario p::before {
+        content: '"';
+        font-size: 3rem;
+        color: rgba(166, 136, 77, 0.3);
+        position: absolute;
+        top: -1.5rem;
+        left: -1rem;
+        line-height: 1;
+      }
+
+      .comentario .nome-feedback {
+        /* Estilo para os nomes gerados */
+        font-size: 0.95rem;
+        color: rgb(200, 200, 200);
+        text-align: right;
+        margin-top: 10px;
+        font-style: normal;
+      }
+
+      .estrelas {
+        color: rgb(166, 136, 77);
+        font-size: 1.5rem;
+        letter-spacing: 3px;
+      }
+
+      @media (max-width: 768px) {
+        .comentario {
+          flex: 1 1 100%;
+          max-width: 100%;
+        }
+
+        #feedback h1 {
+          font-size: 2.5rem;
+          margin-bottom: 3rem;
+        }
+      }
+
+      /* Seção Dúvidas */
+      #duvidas {
+        background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+        padding: 6rem 2rem;
+        color: #ffffff;
+      }
+
+      #duvidas h1 {
+        text-align: center;
+        margin-bottom: 4rem;
+        position: relative;
+      }
+
+      #duvidas h1::after {
+        content: "";
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 3px;
+        background: rgb(166, 136, 77);
+      }
+
+      .perguntas {
+        margin-bottom: 1.5rem;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        background-color: rgba(15, 15, 15, 0.7);
+        border: 1px solid rgba(166, 136, 77, 0.2);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        max-width: 800px;
+        margin: 0 auto 1.5rem;
+      }
+
+      .perguntas.active {
+        border-left: 4px solid rgb(166, 136, 77);
+        box-shadow: 0 10px 30px rgba(166, 136, 77, 0.1);
+      }
+
+      .pergunta-fixa {
+        padding: 1.5rem 2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+        color: #ffffff;
+        font-size: 1.15rem; /* Ajuste da fonte */
+        font-weight: 500;
+        gap: 0.8rem;
+      }
+
+      .pergunta-fixa strong {
+        color: rgb(166, 136, 77);
+      }
+
+      .pergunta-fixa::before {
+        content: "›";
+        font-size: 1.8rem;
+        color: rgb(166, 136, 77);
+        transition: all 0.3s ease;
+        display: inline-flex;
+        width: 20px;
+        justify-content: center;
+      }
+
+      .perguntas.active .pergunta-fixa {
+        background-color: rgba(0, 0, 0, 0.3);
+        color: #ffffff;
+      }
+
+      .perguntas.active .pergunta-fixa strong {
+        color: rgb(166, 136, 77);
+      }
+
+      .perguntas.active .pergunta-fixa::before {
+        transform: rotate(90deg);
+        color: rgb(166, 136, 77);
+      }
+
+      .resposta-pergunta {
+        max-height: 0;
+        overflow: hidden;
+        padding: 0 2rem;
+        transition: all 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+        line-height: 1.8;
+        color: #e0e0e0;
+        background-color: rgba(15, 15, 15, 0.5);
+      }
+
+      .resposta-pergunta p {
+        color: rgb(174, 174, 174);
+        font-size: 1.05rem; /* Ajuste da fonte */
+      }
+
+      .perguntas.active .resposta-pergunta {
+        background-color: rgba(15, 15, 15, 0.5);
+        max-height: 500px;
+        padding: 0 2rem 2rem 2rem;
+      }
+
+      .pergunta-fixa:hover {
+        background-color: rgba(166, 136, 77, 0.1);
+      }
+
+      .perguntas.active .pergunta-fixa:hover {
+        background-color: rgba(0, 0, 0, 0.3);
+      }
+
+      @media (max-width: 768px) {
+        #duvidas h1 {
+          font-size: 2.2rem;
+          margin-bottom: 3rem;
+        }
+
+        .pergunta-fixa {
+          padding: 1.2rem 1.5rem;
+          font-size: 1.05rem; /* Ajuste da fonte */
+        }
+
+        .resposta-pergunta {
+          padding: 0 1.5rem;
+        }
+
+        .perguntas.active .resposta-pergunta {
+          padding: 0 1.5rem 1.5rem 1.5rem;
+        }
+      }
+
+      /* Seção Contato */
+      #contato {
+        background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+        padding: 6rem 2rem; /* Mantendo padding-top e sides, mas não padding-bottom */
+        padding-bottom: 0; /* Removendo padding-bottom para o rodapé ficar colado */
+        position: relative;
+      }
+
+      .contato-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 4rem;
+      }
+
+      .contato-logo {
+        flex: 1;
+        min-width: 300px;
+        display: flex;
+        justify-content: center;
+      }
+
+      .contato-logo img {
+        height: 300px;
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 0 15px rgba(218, 150, 32, 0.5));
+        transition: all 0.4s ease;
+      }
+
+      .contato-logo img:hover {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 20px rgba(218, 153, 32, 0.7));
+      }
+
+      .contato-content {
+        flex: 2;
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 3rem;
+        border-radius: 16px;
+        border: 1px solid rgba(218, 165, 32, 0.3);
+        backdrop-filter: blur(8px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .contato-info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+
+      .info-item {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        background-color: rgba(15, 15, 15, 0.5);
+        border-radius: 10px;
+        transition: all 0.4s ease;
+        border: 1px solid transparent;
+        cursor: pointer; /* Adicionado para indicar clicável */
+      }
+
+      .info-item:hover {
+        border-color: rgba(218, 165, 32, 0.3);
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(218, 165, 32, 0.1);
+      }
+
+      .contact-icon {
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+        transition: all 0.3s ease;
+      }
+
+      .whatsapp-icon {
+        filter: invert(62%) sepia(63%) saturate(541%) hue-rotate(81deg)
+          brightness(95%) contrast(87%);
+      }
+
+      .instagram-icon {
+        filter: invert(27%) sepia(49%) saturate(2593%) hue-rotate(297deg)
+          brightness(97%) contrast(92%);
+      }
+
+      .info-item .icon {
+        font-size: 2rem;
+        color: rgb(166, 136, 77);
+        min-width: 48px;
+        text-align: center;
+      }
+
+      .info-item-content h3 {
+        color: rgb(166, 136, 77);
+        margin-bottom: 0.8rem;
+        font-size: 1.45rem; /* Ajuste da fonte */
+        font-weight: 600;
+      }
+
+      .contato-link {
+        color: #e0e0e0;
+        text-decoration: none;
+        font-size: 1.15rem; /* Ajuste da fonte */
+        transition: all 0.3s ease;
+        display: inline-block;
+      }
+
+      .contato-link:hover {
+        color: rgb(166, 136, 77);
+        transform: translateX(5px);
+      }
+
+      @media (max-width: 1200px) {
+        .contato-container {
+          flex-direction: column;
+          gap: 3rem;
+        }
+
+        .contato-logo img {
+          height: 140px;
+        }
+
+        .contato-content {
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .contato-info {
+          grid-template-columns: 1fr;
+        }
+
+        .contato-logo img {
+          height: 120px;
+        }
+
+        .info-item {
+          padding: 1.2rem;
+        }
+      }
+
+      /* Rodapé */
+      .rodape {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 1.5rem 2rem;
+        background-color: rgba(15, 15, 15, 0.9);
+        color: #e0e0e0;
+        font-size: 0.95rem; /* Ajuste da fonte */
+        border-top: 1px solid rgba(166, 136, 77, 0.3);
+        margin-top: 0; /* Remover qualquer margem superior para colar */
+      }
+
+      .direitos,
+      .creditos {
+        flex: 1;
+      }
+
+      .direitos {
+        text-align: left;
+      }
+
+      .creditos {
+        text-align: right;
+      }
+
+      .rodape p {
+        color: inherit;
+        margin: 0;
+      }
+
+      /* Estilos Gerais de Títulos e Parágrafos */
+      h1 {
+        color: rgb(166, 136, 77);
+        margin-bottom: 2.5rem;
+        font-size: 3.5rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-shadow: 0 5px 15px rgba(218, 165, 32, 0.3);
+        position: relative;
+      }
+
+      p {
+        color: #333;
+        margin-bottom: 1.5rem;
+      }
+
+      /* Botão Flutuante do WhatsApp */
+      .whatsapp-float {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        z-index: 99;
+        background-color: #25d366; /* Cor do WhatsApp */
+        color: white;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2.5rem;
+        text-decoration: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+      }
+
+      .whatsapp-float:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+      }
+      .whatsapp-float img {
+        width: 35px;
+        height: 35px;
+        filter: invert(100%); /* Para deixar o ícone branco */
+      }
+    </style>
   </head>
   <body>
     <nav>
       <div class="nav-logo">
-        <img src="Imagens/Logo.png" class="nav-icon" alt="Site logo" />
+        <!-- Imagem do logo: Usando um placeholder, já que a imagem original 'Imagens/Logo.png' não está disponível diretamente no ambiente. -->
+        <img
+          src="https://placehold.co/200x80/0f0f0f/e0e0e0?text=Logo"
+          class="nav-icon"
+          alt="Site logo"
+        />
       </div>
       <div class="nav-buttons">
         <button class="nav-button" onclick="scrollToSection('home')">
@@ -42,7 +1285,12 @@
 
     <section id="home">
       <div class="content">
-        <img src="Imagens/Logo.png" class="home-logo" alt="N Eventos" />
+        <!-- Imagem do logo na home: Usando um placeholder. -->
+        <img
+          src="https://placehold.co/220x220/0f0f0f/e0e0e0?text=N+Eventos"
+          class="home-logo"
+          alt="N Eventos"
+        />
         <p>
           N Eventos, onde seu sonho ganha forma, com carinho, profissionalismo e
           aquele toque que só quem ama o que faz pode oferecer.<br />
@@ -55,7 +1303,11 @@
     <section id="sobre-nós">
       <div class="conteudo-sobre-nós">
         <div class="imagem-sobre-nós">
-          <img src="Imagens/Trabalhadora.jpg" alt="mulher trabalhadora" />
+          <!-- Imagem da trabalhadora: Usando um placeholder. -->
+          <img
+            src="https://placehold.co/500x350/0f0f0f/e0e0e0?text=Mulher+Trabalhadora"
+            alt="mulher trabalhadora"
+          />
         </div>
         <div class="texto-sobre-nós">
           <p>
@@ -112,12 +1364,22 @@
 
             <div class="servicos-imagens">
               <div class="servico-imagem">
-                <img src="Imagens/Servico2.png" alt="Serviço 1" />
+                <!-- Imagens de serviço: Usando placeholders. -->
+                <img
+                  src="https://placehold.co/400x300/0f0f0f/e0e0e0?text=Serviço+1"
+                  alt="Serviço 1"
+                />
               </div>
 
               <div class="servico-imagem">
-                <img src="Imagens/Servico1.png" alt="Serviço 2" />
-                <img src="Imagens/Servico3.png" alt="Serviço 3" />
+                <img
+                  src="https://placehold.co/400x200/0f0f0f/e0e0e0?text=Serviço+2"
+                  alt="Serviço 2"
+                />
+                <img
+                  src="https://placehold.co/400x200/0f0f0f/e0e0e0?text=Serviço+3"
+                  alt="Serviço 3"
+                />
               </div>
             </div>
           </div>
@@ -144,27 +1406,41 @@
           </button>
         </div>
 
-        <div class="galeria-portfolio" id="galeria-casamento"></div>
+        <div class="galeria-portfolio" id="galeria-casamento">
+          <!-- As imagens serão carregadas via JavaScript -->
+        </div>
 
         <div
           class="galeria-portfolio"
           id="galeria-aniversario"
           style="display: none"
-        ></div>
+        >
+          <!-- As imagens serão carregadas via JavaScript -->
+        </div>
 
         <div
           class="galeria-portfolio"
           id="galeria-corporativo"
           style="display: none"
-        ></div>
+        >
+          <!-- As imagens serão carregadas via JavaScript -->
+        </div>
 
         <div
           class="galeria-portfolio"
           id="galeria-diversos"
           style="display: none"
-        ></div>
+        >
+          <!-- As imagens serão carregadas via JavaScript -->
+        </div>
       </div>
     </section>
+
+    <!-- Modal de Visualização de Imagem (oculto por padrão) -->
+    <div id="imageModal" class="image-modal">
+      <span class="close-modal">&times;</span>
+      <img class="image-modal-content" id="modalImage" />
+    </div>
 
     <section id="feedback">
       <h1>Feedback</h1>
@@ -175,9 +1451,11 @@
             grande dia. Ela cuidou de cada detalhe com tanto carinho, atenção e
             profissionalismo que tudo fluiu de forma leve e perfeita. Sua
             organização e calma nos deram segurança do início ao fim. Sem ela,
-            nada teria sido tão especial!"
+            nada teria sido tão especial!"
           </p>
           <div class="estrelas">★★★★★</div>
+          <div class="nome-feedback"></div>
+          <!-- Espaço para o nome gerado pela API -->
         </div>
 
         <div class="comentario">
@@ -187,9 +1465,11 @@
             estratégica aliada ao bom gosto entrega espaços funcionais,
             sofisticados e alinhados com a identidade da marca. Ela compreende
             os objetivos do evento e traduz tudo isso em uma decoração que
-            impressiona e valoriza a imagem da empresa."
+            impressiona e valoriza a imagem da empresa."
           </p>
           <div class="estrelas">★★★★★</div>
+          <div class="nome-feedback"></div>
+          <!-- Espaço para o nome gerado pela API -->
         </div>
 
         <div class="comentario">
@@ -198,9 +1478,11 @@
             incrível para a decoração, ainda comandou todo o evento com
             maestria. Tudo ficou lindo e aconteceu no tempo certo, sem estresse.
             A presença dela fez toda a diferença e nos permitiu curtir o dia com
-            tranquilidade. Recomendo de olhos fechados!"
+            tranquilidade. Recomendo de olhos fechados!"
           </p>
           <div class="estrelas">★★★★★</div>
+          <div class="nome-feedback"></div>
+          <!-- Espaço para o nome gerado pela API -->
         </div>
       </div>
     </section>
@@ -251,8 +1533,8 @@
               O cerimonial do dia cuida da coordenação apenas no dia do
               casamento, assegurando que tudo ocorra conforme o planejado. Já o
               cerimonial completo acompanha o casal desde os preparativos
-              iniciais até o grande dia, oferecendo suporte integral
-              em cada decisão.
+              iniciais até o grande dia, oferecendo suporte integral em cada
+              decisão.
             </p>
           </div>
         </div>
@@ -262,7 +1544,11 @@
     <section id="contato">
       <div class="contato-container">
         <div class="contato-logo">
-          <img src="Imagens/Logo.png" alt="Logo N Eventos" />
+          <!-- Imagem do logo de contato: Usando um placeholder. -->
+          <img
+            src="https://placehold.co/300x300/0f0f0f/e0e0e0?text=Logo+Contato"
+            alt="Logo N Eventos"
+          />
         </div>
 
         <div class="contato-content">
@@ -275,7 +1561,8 @@
                 alt="WhatsApp"
               />
               <div class="info-item-content">
-                <h3>WhatsApp</h3>
+                <h3>Telefone / Celular</h3>
+                <!-- Texto alterado -->
                 <a href="https://wa.me/5581983544186" class="contato-link"
                   >(81) 9 8354-4186</a
                 >
@@ -307,73 +1594,261 @@
                 >
               </div>
             </div>
-
-            <div class="info-item">
-              <p class="icon">📄</p>
-              <div class="info-item-content">
-                <h3>Formulário de Contato</h3>
-                <a href="formulario.php" class="contato-link"
-                  >Abrir formulário</a
-                >
-              </div>
-            </div>
+            <!-- Card de Formulário de Contato REMOVIDO -->
           </div>
-        </div>
-      </div>
-      <div class="rodape">
-        <div class="direitos">M Eventos – Todos os Direitos Reservados.</div>
-        <div class="creditos">
-          Feito com amor por grupo de alunos ADS 3ºMB, 1º-2025, para o Inter
-          Unibra, Recife/PE
         </div>
       </div>
     </section>
 
-    <div class="wabtn" id="wabutton">
-      <a
-        wa-tooltip="Estamos disponíveis! Clique aqui para conversar"
-        target="_blank"
-        href="https://wa.me/558173327546?text=Oi!%20Estou%20interessado%20em%20seus%20servi%C3%A7os%20e%20gostaria%20de%20saber%20mais%20sobre%20isso.%20Voc%C3%AA%20poderia%20me%20enviar%20mais%20informa%C3%A7%C3%B5es?%20Obrigado!"
-      >
-        <svg
-          width="42"
-          height="42"
-          style="padding: 5px"
-          viewBox="0 0 28 28"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g clip-path="url(#clip0_1024_354)">
-            <path
-              d="M23.8759 4.06939C21.4959 1.68839 18.3316 0.253548 14.9723 0.0320463C11.613 -0.189455 8.28774 0.817483 5.61565 2.86535C2.94357 4.91323 1.10682 7.86244 0.447451 11.1638C-0.21192 14.4652 0.351026 17.8937 2.03146 20.8109L0.0625 28.0004L7.42006 26.0712C9.45505 27.1794 11.7353 27.7601 14.0524 27.7602H14.0583C16.8029 27.7599 19.4859 26.946 21.768 25.4212C24.0502 23.8965 25.829 21.7294 26.8798 19.1939C27.9305 16.6583 28.206 13.8682 27.6713 11.1761C27.1367 8.48406 25.8159 6.01095 23.8759 4.06939ZM14.0583 25.4169H14.0538C11.988 25.417 9.96008 24.8617 8.1825 23.8091L7.7611 23.5593L3.3945 24.704L4.56014 20.448L4.28546 20.0117C2.92594 17.8454 2.32491 15.2886 2.57684 12.7434C2.82877 10.1982 3.91938 7.80894 5.67722 5.95113C7.43506 4.09332 9.76045 2.87235 12.2878 2.48017C14.8152 2.08799 17.4013 2.54684 19.6395 3.78457C21.8776 5.02231 23.641 6.96875 24.6524 9.3179C25.6638 11.6671 25.8659 14.2857 25.2268 16.7622C24.5877 19.2387 23.1438 21.4326 21.122 22.999C19.1001 24.5655 16.6151 25.4156 14.0575 25.4157L14.0583 25.4169Z"
-              fill="#E0E0E0"
-            ></path>
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M10.6291 7.98363C10.3723 7.41271 10.1019 7.40123 9.85771 7.39143C9.65779 7.38275 9.42903 7.38331 9.20083 7.38331C9.0271 7.3879 8.8562 7.42837 8.69887 7.5022C8.54154 7.57602 8.40119 7.68159 8.28663 7.81227C7.899 8.17929 7.59209 8.62305 7.38547 9.11526C7.17884 9.60747 7.07704 10.1373 7.08655 10.6711C7.08655 12.3578 8.31519 13.9877 8.48655 14.2164C8.65791 14.4452 10.8581 18.0169 14.3425 19.3908C17.2382 20.5327 17.8276 20.3056 18.4562 20.2485C19.0848 20.1913 20.4843 19.4194 20.7701 18.6189C21.056 17.8183 21.0557 17.1323 20.9701 16.989C20.8844 16.8456 20.6559 16.7605 20.3129 16.5889C19.9699 16.4172 18.2849 15.5879 17.9704 15.4736C17.656 15.3594 17.4275 15.3023 17.199 15.6455C16.9705 15.9888 16.3139 16.7602 16.1137 16.9895C15.9135 17.2189 15.7136 17.2471 15.3709 17.0758C14.3603 16.6729 13.4275 16.0972 12.6143 15.3745C11.8648 14.6818 11.2221 13.8819 10.7072 13.0007C10.5073 12.6579 10.6857 12.472 10.8579 12.3007C11.0119 12.1472 11.2006 11.9005 11.3722 11.7003C11.5129 11.5271 11.6282 11.3346 11.7147 11.1289C11.7603 11.0343 11.7817 10.9299 11.7768 10.825C11.7719 10.7201 11.7409 10.6182 11.6867 10.5283C11.6001 10.3566 10.9337 8.66151 10.6291 7.98363Z"
-              fill="white"
-            ></path>
-            <path
-              d="M23.7628 4.02445C21.4107 1.66917 18.2825 0.249336 14.9611 0.0294866C11.6397 -0.190363 8.35161 0.804769 5.70953 2.82947C3.06745 4.85417 1.25154 7.77034 0.600156 11.0346C-0.051233 14.299 0.506321 17.6888 2.16894 20.5724L0.222656 27.6808L7.49566 25.7737C9.50727 26.8692 11.7613 27.4432 14.0519 27.4434H14.0577C16.7711 27.4436 19.4235 26.6392 21.6798 25.1321C23.936 23.6249 25.6947 21.4825 26.7335 18.9759C27.7722 16.4693 28.0444 13.711 27.5157 11.0497C26.9869 8.38835 25.6809 5.94358 23.7628 4.02445ZM14.0577 25.1269H14.0547C12.0125 25.1271 10.0078 24.5782 8.25054 23.5377L7.8339 23.2907L3.51686 24.4222L4.66906 20.2143L4.39774 19.7831C3.05387 17.6415 2.4598 15.1141 2.70892 12.598C2.95804 10.082 4.03622 7.72013 5.77398 5.88366C7.51173 4.04719 9.81051 2.84028 12.3089 2.45266C14.8074 2.06505 17.3638 2.5187 19.5763 3.74232C21.7888 4.96593 23.5319 6.89011 24.5317 9.21238C25.5314 11.5346 25.7311 14.1233 25.0993 16.5714C24.4675 19.0195 23.0401 21.1883 21.0414 22.7367C19.0427 24.2851 16.5861 25.1254 14.0577 25.1255V25.1269Z"
-              fill="white"
-            ></path>
-          </g>
-          <defs>
-            <clipPath id="clip0_1024_354">
-              <rect
-                width="27.8748"
-                height="28"
-                fill="white"
-                transform="translate(0.0625)"
-              ></rect>
-            </clipPath>
-          </defs>
-        </svg>
-        <span class="button-text"></span>
-      </a>
+    <!-- Rodapé movido para fora da seção de contato para ficar colado no final da página -->
+    <div class="rodape">
+      <div class="direitos">N Eventos – Todos os Direitos Reservados.</div>
+      <!-- Nome da empresa corrigido -->
+      <div class="creditos">
+        Feito com amor por grupo de alunos ADS 3ºMB, 1º-2025, para o Inter
+        Unibra, Recife/PE
+      </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Botão Flutuante do WhatsApp -->
+    <a
+      href="https://wa.me/5581983544186"
+      class="whatsapp-float"
+      target="_blank"
+      aria-label="WhatsApp"
+    >
+      <img
+        src="https://img.icons8.com/m_outlined/512/whatsapp.png"
+        alt="WhatsApp Icon"
+      />
+    </a>
+
+    <script>
+      // Funções JavaScript
+      // Função para dar scroll para seção
+      function scrollToSection(sectionId) {
+        const section = document.getElementById(sectionId);
+        section.scrollIntoView({ behavior: "smooth" });
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // Botões da barra de navegação
+        const navButtons = document.querySelectorAll(".nav-button");
+        navButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            navButtons.forEach((btn) => btn.classList.remove("active"));
+            this.classList.add("active");
+          });
+        });
+
+        // Ativa o botão da navegação ao rolar para a seção correspondente
+        window.addEventListener("scroll", () => {
+          const sections = document.querySelectorAll("section");
+          // Recarrega os botões da navegação para garantir que a NodeList esteja atualizada
+          const currentNavButtons = document.querySelectorAll(".nav-button");
+
+          sections.forEach((section, index) => {
+            const rect = section.getBoundingClientRect();
+            // Ajusta o offset conforme necessário, 150px é um bom ponto para ativar a seção
+            if (rect.top <= 150 && rect.bottom >= 150) {
+              currentNavButtons.forEach((btn) =>
+                btn.classList.remove("active")
+              );
+              // Verifica se o botão existe antes de adicionar a classe 'active'
+              if (currentNavButtons[index]) {
+                currentNavButtons[index].classList.add("active");
+              }
+            }
+          });
+        });
+
+        // Botões das perguntas frequentes (FAQ)
+        document.querySelectorAll(".pergunta-fixa").forEach((question) => {
+          question.addEventListener("click", () => {
+            const item = question.parentNode;
+            item.classList.toggle("active");
+
+            // Fecha outras perguntas quando uma é aberta
+            document.querySelectorAll(".perguntas").forEach((otherItem) => {
+              if (
+                otherItem !== item &&
+                otherItem.classList.contains("active")
+              ) {
+                otherItem.classList.remove("active");
+              }
+            });
+          });
+        });
+
+        // Botões de categoria do portfólio
+        const botoesCategoria = document.querySelectorAll(".categoria-btn");
+
+        botoesCategoria.forEach((botao) => {
+          botao.addEventListener("click", function () {
+            botoesCategoria.forEach((btn) => btn.classList.remove("active"));
+
+            this.classList.add("active");
+
+            document
+              .querySelectorAll(".galeria-portfolio")
+              .forEach((galeria) => {
+                galeria.style.display = "none";
+              });
+
+            const categoria = this.getAttribute("data-categoria");
+            document.getElementById(`galeria-${categoria}`).style.display =
+              "grid";
+          });
+        });
+
+        // Preenche as galerias do portfólio com imagens placeholder
+        const galeriaCasamento = document.getElementById("galeria-casamento");
+        const galeriaAniversario = document.getElementById(
+          "galeria-aniversario"
+        );
+        const galeriaCorporativo = document.getElementById(
+          "galeria-corporativo"
+        );
+        const galeriaDiversos = document.getElementById("galeria-diversos");
+
+        // Função para gerar itens do portfólio com placeholders agrupados
+        const generatePortfolioItems = (galleryElement, categoryName) => {
+          const categoryTypes = {
+            casamento: ["Tradicional", "Junino", "Praia", "Campo"],
+            aniversario: ["Infantil", "Adulto", "Temático", "Debutante"],
+            corporativo: ["Conferência", "Lançamento", "Gala", "Feira"],
+            diversos: ["Formatura", "Chá de Bebê", "Desfile", "Exposição"],
+          };
+
+          const types = categoryTypes[categoryName] || ["Geral"];
+
+          for (let typeIndex = 0; typeIndex < types.length; typeIndex++) {
+            const type = types[typeIndex];
+            for (let i = 1; i <= 5; i++) {
+              // Gerar 5 fotos por tipo
+              const itemHTML = `
+                            <div class="item-portfolio">
+                                <img src="https://placehold.co/400x300/1a1a1a/e0e0e0?text=${categoryName}+${type}+${i}" alt="${categoryName} ${type} ${i}">
+                                <div class="overlay">
+                                    <h3>${type} ${i}</h3>
+                                    <p>Detalhes do evento de ${type}.</p>
+                                </div>
+                            </div>
+                        `;
+              galleryElement.innerHTML += itemHTML;
+            }
+          }
+        };
+
+        generatePortfolioItems(galeriaCasamento, "casamento");
+        generatePortfolioItems(galeriaAniversario, "aniversario");
+        generatePortfolioItems(galeriaCorporativo, "corporativo");
+        generatePortfolioItems(galeriaDiversos, "diversos");
+
+        // Ativa o primeiro botão de categoria (Casamento) e mostra sua galeria ao carregar
+        if (botoesCategoria.length > 0) {
+          botoesCategoria[0].click();
+        }
+
+        // Lógica do Modal de Imagem
+        const imageModal = document.getElementById("imageModal");
+        const modalImage = document.getElementById("modalImage");
+        const closeModal = document.querySelector(".close-modal");
+
+        document.querySelectorAll(".item-portfolio img").forEach((img) => {
+          img.addEventListener("click", function () {
+            imageModal.style.display = "flex"; // Exibir modal
+            modalImage.src = this.src; // Definir a imagem clicada como fonte do modal
+            modalImage.alt = this.alt;
+          });
+        });
+
+        // Fechar o modal ao clicar no 'x' ou fora da imagem
+        closeModal.addEventListener("click", () => {
+          imageModal.style.display = "none";
+        });
+        imageModal.addEventListener("click", (e) => {
+          if (e.target === imageModal) {
+            imageModal.style.display = "none";
+          }
+        });
+
+        // Tornar os itens de contato inteiros clicáveis
+        document
+          .querySelectorAll(".contato-info .info-item")
+          .forEach((item) => {
+            item.addEventListener("click", function () {
+              const link = this.querySelector(".contato-link");
+              if (link) {
+                window.open(link.href, "_blank"); // Abre o link em uma nova aba
+              }
+            });
+          });
+
+        // Geração de nomes aleatórios para Feedback usando a Gemini API
+        async function generateRandomNames() {
+          const feedbackNamesElements = document.querySelectorAll(
+            ".comentario .nome-feedback"
+          );
+          if (feedbackNamesElements.length === 0) return;
+
+          const prompt = `Gere uma lista de ${feedbackNamesElements.length} nomes e sobrenomes aleatórios de pessoas comuns do Brasil. O formato deve ser um array JSON de strings, por exemplo: ["João Silva", "Maria Santos", "Pedro Almeida"].`;
+
+          try {
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = {
+              contents: chatHistory,
+              generationConfig: {
+                responseMimeType: "application/json",
+                responseSchema: {
+                  type: "ARRAY",
+                  items: { type: "STRING" },
+                },
+              },
+            };
+            const apiKey = ""; // Deixe em branco para que o ambiente forneça a chave
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            const response = await fetch(apiUrl, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+
+            const result = await response.json();
+            if (
+              result.candidates &&
+              result.candidates.length > 0 &&
+              result.candidates[0].content &&
+              result.candidates[0].content.parts &&
+              result.candidates[0].content.parts.length > 0
+            ) {
+              const jsonString = result.candidates[0].content.parts[0].text;
+              const names = JSON.parse(jsonString);
+
+              names.forEach((name, index) => {
+                if (feedbackNamesElements[index]) {
+                  feedbackNamesElements[index].textContent = `- ${name}`;
+                }
+              });
+            } else {
+              console.error(
+                "Estrutura de resposta da API inesperada ou conteúdo ausente."
+              );
+            }
+          } catch (error) {
+            console.error("Erro ao chamar a Gemini API:", error);
+            // Em caso de erro, você pode definir nomes padrão ou deixar em branco
+            feedbackNamesElements.forEach((element) => {
+              element.textContent = "- Cliente Satisfeito";
+            });
+          }
+        }
+
+        // Chamar a função para gerar nomes quando a página carregar
+        generateRandomNames();
+      });
+    </script>
   </body>
 </html>
